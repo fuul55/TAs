@@ -1,0 +1,300 @@
+{% load static %}
+{% load transport_tags %}
+
+{% if perms.transport.view_buyerload %}
+{% if load_stat %}
+<div id="buyer_load_info" class="load_container">
+    <div class="item">
+        {% if buyer_load %}
+        <div class="block_header">
+            {{title}}
+        </div>
+        <div class="pi-list">
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/load_v.svg' %}" alt="time_data">
+                <div class="pi_right">
+                    <h4>Date sold: {{ buyer_load.date_sold_load | date:"d M Y" }}</h4>
+                    {% if perms.transport.change_company %}
+                    {% if not load.stat_id == 7 %}
+                    {% if not load.stat_id == 6 %}
+                    <a href="{{ buyer_load.company_mc.get_absolute_url }}" target="_blank">
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                        <div class="show_info_load">
+                            <p>Buyer name: {{ buyer_load.company_mc.company_name }}</p>
+                            <p>MC: {{ buyer_load.company_mc.company_mc }} DOT: {{ buyer_load.company_mc.company_dot}}</p>
+                            <p>Email: {{ buyer_load.company_mc.company_email }}</p>
+                            <p>Phone: {{ buyer_load.company_mc.company_phone }}</p>
+                        </div>
+                    {% if perms.transport.change_company %}
+                    {% if not load.stat_id == 7 %}
+                    {% if not load.stat_id == 6 %}
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    <h4>Sell price: ${{ buyer_load.load_sell_price | floatformat:'2g'}}</h4>
+                    <hr/>
+                </div>
+            </div>
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/truck.svg' %}" alt="time_data">
+                <div class="pi_right">
+                    <h4>Drivers and truck info:</h4>
+                    <p>{{ buyer_load.truck_info | linebreaks }}</p>
+                    <hr/>
+                </div>
+            </div>
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/load_info.svg' %}" alt="load_info">
+                <div class="pi_right">
+                    <h4>Load info:</h4>
+                    <p>{{ buyer_load.truck_requirements | linebreaks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="pi-list">
+            <div id="buyer_doc_anchor_close" class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/doc_view_.svg' %}" alt="Doc">
+                <div class="pi_right">
+                    <h4>Documents:</h4>
+                    {% for d in buyer_doc %}
+                    <a href="{{ d.documents.url }}" target="_blank">
+                        <div class="doc-list_show">
+                            <img class="doc_views" src="{% static 'transport/images/doc_view.svg' %}" alt="Doc">
+                            {{d.doc}}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="pi-list">
+            <div id="payment_anchor_close_{{doc_slug}}" class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/credit.svg' %}" alt="Doc">
+                <div class="pi_right">
+                    <h4>{{title_pay}}</h4>
+                    <h4>buyer credit ${{cash_sum | floatformat:'2g'}}</h4>
+                    {% for d in transaction_get %}
+                    {% if d.executed %}
+                    <div class="payment-list_show_green">
+                    {% else %}
+                    <div class="payment-list_show">
+                    {% endif %}
+                        {% if not load.stat_id == 7 %}
+                        {% if not load.stat_id == 6 %}
+                        <a href="{{ d.get_absolute_url }}">
+                        {% endif %}
+                        {% endif %}
+                            <p>{{d.transaction_data | date:"d M Y" }}</p>
+                            <h4>{{d.transaction_name}} ${{d.cash_sum | floatformat:'2g'}}</h4>
+                            <p>{{d.comment}}</p>
+                        {% if not load.stat_id == 7 %}
+                        {% if not load.stat_id == 6 %}
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                        <hr>
+                        <a href="{{ d.payment_doc.url }}" target="_blank">
+                            <img class="doc_views" src="{% static 'transport/images/doc_view.svg' %}" alt="Doc">
+                            payment doc
+                        </a>
+                    </div>
+                    {% endfor %}
+                    {% for d in transaction_send %}
+                    {% if d.executed %}
+                    <div class="payment-list_show_green">
+                    {% else %}
+                    <div class="payment-list_show">
+                    {% endif %}
+                        {% if not load.stat_id == 7 %}
+                        {% if not load.stat_id == 6 %}
+                        <a href="{{ d.get_absolute_url }}">
+                        {% endif %}
+                        {% endif %}
+                            <p>{{d.transaction_data | date:"d M Y" }}</p>
+                            <h4>{{d.transaction_name}} ${{d.cash_sum | floatformat:'2g'}}</h4>
+                            <p>{{d.comment}}</p>
+                        {% if not load.stat_id == 7 %}
+                        {% if not load.stat_id == 6 %}
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                        <hr>
+                        <a href="{{ d.payment_doc.url }}" target="_blank">
+                            <img class="doc_views" src="{% static 'transport/images/doc_view.svg' %}" alt="Doc">
+                            payment doc
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% if not load.stat_id == 7 %}
+        {% if not load.stat_id == 6 %}
+        {% if perms.transport.change_buyerload %}
+        <div class="pi-list_more">
+            <div id="buyer_more_open"></div>
+            <button class="title-button_inside"
+                    onClick="show('buyer_more', 'buyer_more_open', 'buyer_load_info');return false;">{{buyer_more}}
+            </button>
+            <div id="buyer_more" class="hidden">
+                <hr>
+                <div id="buyer_load_open"></div>
+                <button class="title-button_inside_margin"
+                        onClick="show('edit_buyer_load', 'buyer_load_open', 'buyer_load_info');return false;">
+                    {{title_b_e}}
+                </button>
+                <div id="edit_buyer_load" class="hidden">
+                    <form action="{% url 'buyer_load_edit' %}#buyer_load_info" method="post">
+                        {% csrf_token %}
+                        <div class="form-error">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% for m in buyer_edit_form %}
+                        {% if not m.is_hidden %}
+                        <div class="item">
+                            <label class="form-label" for="{{ f.id_for_label }}">{{m.label}}:</label>
+                            {{ m }}
+                        </div>
+                        <div class="form-error">
+                            {{ m.errors }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <button class="form-button" type="submit">Change buyer info</button>
+                    </form>
+                </div>
+                {% if perms.transport.view_docbuyer %}
+                <div id="buyer_doc_anchor_open"></div>
+                <button class="title-button_inside_margin"
+                        onClick="show('buyer_doc_show', 'buyer_doc_anchor_open', 'buyer_doc_anchor_close');return true;">
+                    {{title_add_doc}}
+                </button>
+                <div id="buyer_doc_show" class="hidden">
+                    {% if perms.transport.delete_docbuyer %}
+                    <div id="doc">
+                        {% for l in buyer_doc %}
+                        <a href="{{ l.documents.url }}" target="_blank">
+                            <div class="doc-list">
+                                <img class="doc_views" src="{% static 'transport/images/doc_view.svg' %}" alt="Doc">
+                                {{l.doc}}
+                            </div>
+                        </a>
+                        <div class="doc-list_del">
+                            <form action="{% url 'delete_buyer_doc' l.id %}#buyer_doc_anchor_close" method="post">
+                                {% csrf_token %}
+                                <button class="del_doc" type="submit">Del</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if perms.transport.add_docbuyer %}
+                    <form action="{% url 'buyer_documents' %}#buyer_doc_anchor_close" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for m in buyer_doc_form %}
+                        <div class="item"><label class="form-label" for="{{ f.id_for_label }}">{{m.label}}:</label>{{m}}
+                        </div>
+                        <div class="form-error">
+                            {{ m.errors }}
+                        </div>
+                        {% endfor %}
+                        <button class="form-button" type="submit">Add doc</button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if perms.transport.view_cashtransaction and perms.transport.view_buyerload %}
+                <div id="payment_seller_load_anchor_open_{{doc_slug}}"></div>
+                <button class="title-button_inside_margin"
+                        onClick="show('payment_seller_load_{{doc_slug}}', 'payment_seller_load_anchor_open_{{doc_slug}}', 'payment_anchor_close_{{doc_slug}}');return true;">
+                    {{title_payment}}
+                </button>
+                <div id="payment_seller_load_{{doc_slug}}" class="hidden">
+                    {% if perms.transport.view_cashtransaction and perms.transport.change_buyerload %}
+                    <div id="payment">
+                        {% for d in transaction_all %}
+                        {% if not d.executed %}
+                        <div class="doc-list">
+                            <img class="doc_views" src="{% static 'transport/images/debt.svg' %}" alt="Doc">
+                            {{d.transaction_data | date:"d M Y" }}
+                            {{d.transaction_name | cut:'payment'}}
+                            ${{d.cash_sum | floatformat:'2g'}}
+                        </div>
+                        <div class="doc-list_del">
+                            <form action="{% url 'delete_seller_payment' d.id %}#payment_anchor_close_{{doc_slug}}"
+                                  method="post">
+                                {% csrf_token %}
+                                <button class="del_doc" type="submit">Del</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if perms.transport.view_cashtransaction and perms.transport.change_buyerload %}
+                    <form action="{% url 'cash_transaction_buyer_add' buyer_pk %}#payment_anchor_close_{{doc_slug}}"
+                          method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for m in payment_form %}
+                        {% if not m.is_hidden %}
+                        <div class="item"><label class="form-label" for="{{ f.id_for_label }}">{{m.label}}:</label>{{m}}
+                        </div>
+                        <div class="form-error">
+                            {{ m.errors }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <button class="form-button" type="submit">{{title_transaction}}</button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <div class="button_create">
+                    <a href="{% url 'pdfview:pdf-view_rate_confirmation' buyer_load.slug %}" target="_blank">
+                        <button class="title-button_inside_margin">Create rate confirmation</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+        {% else %}
+        {% if perms.transport.add_buyerload %}
+        {% if not load.stat_id == 6 %}
+        <div id="buyer_load_open_"></div>
+        <button class="title-button_inside"
+                onClick="show('buyer_load', 'buyer_load_open_', 'buyer_load_info');return false;">{{title_b_e}}
+        </button>
+        <div id="buyer_load" class="hidden">
+            <form action="{% url 'buyer_load_info' %}#buyer_load_info" method="post">
+                {% csrf_token %}
+                <div class="form-error">
+                    {{ form.non_field_errors }}
+                </div>
+                {% for m in buyer_form %}
+                <div class="item">
+                    <label class="form-label" for="{{ f.id_for_label }}">{{m.label}}:</label>
+                    {{ m }}
+                </div>
+                <div class="form-error">
+                    {{ m.errors }}
+                </div>
+                {% endfor %}
+                <button class="form-button" type="submit">Add buyer</button>
+            </form>
+        </div>
+        {% else %}
+                <h4>You do not have permissions to add Buyer</h4>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endif %}

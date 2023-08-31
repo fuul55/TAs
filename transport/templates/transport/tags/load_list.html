@@ -1,0 +1,83 @@
+{% for l in loads %}
+{% if l.stat_id == 2 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_grey">
+        <h4>{{l.load_prefix_broker}}{{l.slug}}</h4>
+        <p>{{l.user}} / status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 6 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_dark_grey">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} -
+        {{l.stat}} - profit: {{l.load_profit}}</h4>
+        <p>{{l.user}} / load status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 1 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_red">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} -
+        buy ${{l.load_buy_price | floatformat:'0g'}} - sell ${{l.load_sell_price | floatformat:'0g'}}</h4>
+        <p>{{l.user}} / status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 3 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_orange">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} -
+        buy $ {{l.load_buy_price | floatformat:'0g'}}</h4>
+        <p>{{l.user}} / status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 4 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_green">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} -
+        buy $ {{l.load_buy_price | floatformat:'0g'}} - sell $ {{l.load_sell_price | floatformat:'0g'}}</h4>
+        <p>{{l.user}} / load status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 5 and l.load_buy_price == 0 and l.load_sell_price == 0 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_blue_red_blue">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} -
+        received ${{l.load_buy_price | floatformat:'0g'}} - sent ${{l.load_sell_price | floatformat:'0g'}}</h4>
+        <p>{{l.user}} / load status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 5 and l.load_buy_price > 0 and l.load_sell_price > 0 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_blue">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} - received ${{l.load_buy_price | floatformat:'0g'}} -
+            sent ${{l.load_sell_price | floatformat:'0g'}}</h4>
+        <p>{{l.user}} / load status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 5 and l.load_buy_price > 0 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_blue_white">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} -
+        received ${{l.load_buy_price | floatformat:'0g'}} - sent ${{l.load_sell_price | floatformat:'0g'}}</h4>
+        <p>{{l.user}} / load status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 5 and l.load_sell_price > 0 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_blue_red">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} -
+        received ${{l.load_buy_price | floatformat:'0g'}} - sent ${{l.load_sell_price | floatformat:'0g'}}</h4>
+        <p>{{l.user}} / load status: {{l.stat}}</p>
+    </div>
+</a>
+{% elif l.stat_id == 7 %}
+<a href="{{ l.get_absolute_url }}">
+    <div class="load-list_black">
+        <h4>{{l.load_prefix_broker}}{{l.slug}} -
+        {{l.stat}} - profit: {{l.load_profit}}</h4>
+        <p>{{l.user}} / load status: {{l.stat}}</p>
+    </div>
+</a>
+{% else %}
+{% endif %}
+{% endfor %}

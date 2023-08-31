@@ -1,0 +1,44 @@
+{% extends 'transport/base.html' %}
+{% load static %}
+{% block content %}
+<div class="load_container">
+    <div class="item_di">
+        <div class="title-load">
+            <p>{{title}} $ {{to_pay_sum | floatformat:'2g'}}</p>
+        </div>
+        {% for l in to_pay_for_load %}
+        {% if l.executed %}
+        <div class="payment-list-green">
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/to_pay_ok.svg' %}" alt="broker">
+                <div class="pi_right">
+                    <a href="{{l.get_absolute_url}}">
+                        <h3>{{l.slug.load_prefix_broker}}{{l.slug}}</h3>
+                        <p>{{l.broker_carrier_mc.company_name}}</p>
+                        <p>Payment date {{l.transaction_data | date:"d M Y"}}</p>
+                        <p>{{l.buyer_seller_mc.company_name}}</p>
+                        <h4>${{l.cash_sum | floatformat:'2g'}}</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="payment-list-blue">
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/to_pay.svg' %}" alt="broker">
+                <div class="pi_right">
+                    <a href="{{l.get_absolute_url}}">
+                        <h3>{{l.slug.load_prefix_broker}}{{l.slug}}</h3>
+                        <p>{{l.broker_carrier_mc.company_name}}</p>
+                        <p>Payment date {{l.transaction_data | date:"d M Y"}}</p>
+                        <p>{{l.buyer_seller_mc.company_name}}</p>
+                        <h4>${{l.cash_sum | floatformat:'2g'}}</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

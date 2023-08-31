@@ -1,0 +1,23 @@
+{% extends 'transport/base.html' %}
+
+{% block login %}
+<div class="load_container">
+    <div class="item_di">
+        <div class="title-load">
+            <p>{{title}}</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+            {% for f in form %}
+            <div class="item"><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}:</label>{{f}}
+            </div>
+            <div class="form-error">
+                {{ f.errors }}
+            </div>
+            {% endfor %}
+            <button class="form-button" type="submit">{{button_login}}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

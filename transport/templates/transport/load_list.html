@@ -1,0 +1,15 @@
+{% extends 'transport/base.html' %}
+{% load transport_tags %}
+
+{% block content %}
+{% if perms.transport.view_load %}
+<div class="load_container">
+    <div class="item_di">
+    <div class="title-load">
+        <p>{{title}}</p>
+    </div>
+    {% show_load 'date_create' %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

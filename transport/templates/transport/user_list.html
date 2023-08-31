@@ -1,0 +1,53 @@
+{% extends 'transport/base.html' %}
+{% load transport_tags %}
+
+{% block content %}
+{% if perms.transport.change_company %}
+<div class="load_container">
+    <div class="item_di">
+        <div class="title-load">
+            <p>{{title}}</p>
+        </div>
+            <a href="{% url 'add_user' %}">
+                <button class="title-button_inside_margin">{{title_add_user}}</button>
+            </a>
+        <hr>
+        {% for l in user_lt %}
+        <a href="{% url 'show_user' l.username %}">
+            {% if l.is_active %}
+            <div class="load-list_green">
+            {% else %}
+            <div class="user-list_grey">
+            {% endif %}
+                <h4>user / {{l.username}} /</h4>
+                <p>last name - {{l.last_name}} </p>
+                <p>first name - {{l.first_name}}</p>
+                {% if l.email %}
+                <p>email - {{l.email}}</p>
+                {% endif %}
+                {% if l.groups.all.0 or l.groups.all.1  or l.groups.all.2  or l.groups.all.3  or l.groups.all.4  or l.groups.all.5 %}
+                <p>groups -
+                    {{ l.groups.all.0 }}
+                    {{ l.groups.all.1 }}
+                    {{ l.groups.all.2 }}
+                    {{ l.groups.all.3 }}
+                    {{ l.groups.all.4 }}
+                    {{ l.groups.all.5 }}
+                </p>
+                {% endif %}
+                {% if l.usercompany.user_company.company_name %}
+                <p>user broker - {{l.usercompany.user_company.company_name}}</p>
+                {% endif %}
+                {% if l.usercompany.load_broker_default.company_name %}
+                <p>load default broker - {{l.usercompany.load_broker_default.company_name}}</p>
+                {% endif %}
+                {% if l.usercompany.load_carrier_default.company_name %}
+                <p>load default carrier - {{l.usercompany.load_carrier_default.company_name}}</p>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

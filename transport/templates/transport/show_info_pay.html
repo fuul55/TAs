@@ -1,0 +1,92 @@
+{% extends 'transport/base.html' %}
+{% load static %}
+{% block content %}
+<div class="load_container">
+    <div class="item_di">
+        {% if perms.transport.change_cashtransaction %}
+        <a href="{%url 'company_transaction' company_pk  %}">
+            <button class="title-button_inside_margin">
+                {{show_to_pay.broker_carrier_mc.company_name | truncatechars:'25'}}
+            </button>
+        </a>
+        <hr>
+        {% endif %}
+        <p>{{title}} $ {{show_to_pay.cash_sum | floatformat:'2g'}}</p>
+        <hr>
+        {% if show_to_pay.executed %}
+        <div class="payment-list-green">
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/to_pay_ok.svg' %}" alt="broker">
+                {% else %}
+                <div class="payment-list-blue">
+                    <div class="review_top">
+                        <img class="pi_views_img" src="{% static 'transport/images/to_pay.svg' %}" alt="broker">
+                        {% endif %}
+                        <div class="pi_right">
+                            <h4>{{show_to_pay.broker_carrier_mc.company_name}},
+                                MC#{{show_to_pay.broker_carrier_mc.company_mc}}</h4>
+                            <p>{{show_to_pay.transaction_name}} {{show_to_pay.transaction_data | date:"d M Y"}}</p>
+                            <h4>{{show_to_pay.buyer_seller_mc.company_name}},
+                                MC#{{show_to_pay.buyer_seller_mc.company_mc}}</h4>
+                            <p>{{show_to_pay.buyer_seller_mc.company_email}}</p>
+                            <p>{{show_to_pay.buyer_seller_mc.company_phone}}</p>
+                            <a class="button-url" href="{{show_to_pay.slug.get_absolute_url}}" target="_blank">
+                                load - {{show_to_pay.slug.load_prefix_broker}}{{show_to_pay.slug}}
+                            </a>
+                            <hr>
+                            <p>Purpose of payment:</p>
+                            <p>{{show_to_pay.comment}}</p>
+                            <a href="{{show_to_pay.payment_doc.url}}" target="_blank">
+                                <div class="doc-list_show">
+                                    <img class="doc_views" src="{% static 'transport/images/doc_view.svg' %}" alt="Doc">
+                                    payment doc
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% if not load.stat_id == 7 %}
+                {% if not load.stat_id == 6 %}
+                {% if perms.transport.change_cashtransaction %}
+                <div class="payment-list-blue">
+                    <div id="{{to_pay_id}}"></div>
+                    <button class="title-button_inside_margin"
+                            onClick="show('edit_to_pay', '{{to_pay_id}}', '#');return false;">
+                        {{title_edit}}
+                    </button>
+                    <div id="edit_to_pay" class="hidden">
+                        {% if not show_to_pay.slug %}
+                        {% if perms.transport.delete_cashtransaction %}
+                        <div class="company-list_del">
+                            <form action="{% url 'delete_company_payment' to_pay_id %}#payment_anchor_close_{{doc_slug}}"
+                                  method="post">
+                                {% csrf_token %}
+                                <button class="del_doc" type="submit">Del</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        <form action="{% url 'to_pay_save' to_pay_id %}#" method="post">
+                            {% csrf_token %}
+                            <div class="form-error">
+                                {{ form.non_field_errors }}
+                            </div>
+                            {% for m in form_to_pay %}
+                            <div class="item">
+                                <label class="form-label" for="{{ f.id_for_label }}">{{m.label}}:</label>
+                                {{ m }}
+                            </div>
+                            <div class="form-error">
+                                {{ m.errors }}
+                            </div>
+                            {% endfor %}
+                            <button class="form-button" type="submit">Save</button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% endblock %}

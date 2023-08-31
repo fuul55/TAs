@@ -1,0 +1,1 @@
+[{"model": "transport.transaction", "pk": 1, "fields": {"name": "received payment"}}, {"model": "transport.transaction", "pk": 2, "fields": {"name": "sent payment"}}]

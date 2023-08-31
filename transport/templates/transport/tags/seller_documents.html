@@ -1,0 +1,43 @@
+{% load static %}
+{% load transport_tags %}
+<div id="seller_doc"></div>
+<div class="load_container">
+    <div class="item">
+        {% if doc %}
+        <div class="block_header">
+            {{title}}
+        </div>
+        {% endif %}
+        <div>
+            {% for l in doc %}
+            <a href="{{ l.documents.url }}" target="_blank">
+                <div class="doc-list">
+                <img class="doc_views" src="{% static 'transport/images/doc_view.svg' %}" alt="Doc">
+                {{l.doc}} - {{l.documents |cut:'documents/seller/'}}
+                </div>
+            </a>
+            <div class="doc-list_del">
+                <form action="{% url 'delete_seller_doc' l.id %}#seller_doc" method="post">
+                {% csrf_token %}
+                <button class="del_doc" type="submit">Del</button>
+                </form>
+            </div>
+            {% endfor %}
+            <div id="seller_doc_add"></div>
+            <button class="title-button_inside" onClick="show('add_doc_seller', 'seller_doc_add');return true;">{{title_add}}</button></a>
+            <div id="add_doc_seller" class="hidden">
+                <form action="{% url 'seller_documents' %}#seller_doc" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for m in doc_form %}
+                <div class="item"><label class="form-label" for="{{ f.id_for_label }}">{{m.label}}:</label>{{ m }}
+                </div>
+                <div class="form-error">
+                {{ m.errors }}
+                </div>
+                {% endfor %}
+                <button class="form-button" type="submit">Add doc</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

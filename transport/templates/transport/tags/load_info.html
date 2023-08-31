@@ -1,0 +1,175 @@
+{% load static %}
+{% load transport_tags %}
+
+{% if perms.transport.view_load %}
+<div id="load_info" class="load_container">
+    <div class="item">
+        <div class="block_header">
+            {{title_load | linebreaks }}
+        </div>
+        <div class="pi-list">
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/load_vB.svg' %}" alt="broker">
+                <div class="pi_right">
+                    <h4>Load Broker:</h4>
+                    {% if perms.transport.add_company %}
+                    {% if not load_data.stat_id == 7 %}
+                    {% if not load_data.stat_id == 6 %}
+                    <a href="{{ company_broker_load.get_absolute_url }}">
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                        <div class="show_info_load">
+                            <p>Name: {{company_broker_load.company_name}}</p>
+                            <p>MC #{{ company_broker_load.company_mc }}</p>
+                            <p>Prefix {{ company_broker_load.company_prefix }}</p>
+                        </div>
+                    {% if perms.transport.add_company %}
+                    {% if not load_data.stat_id == 7 %}
+                    {% if not load_data.stat_id == 6 %}
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/load_vC.svg' %}" alt="broker">
+                <div class="pi_right">
+                    <h4>Load Carrier:</h4>
+                    {% if perms.transport.add_company %}
+                    {% if not load_data.stat_id == 7 %}
+                    {% if not load_data.stat_id == 6 %}
+                    <a href="{{ company_carrier_load.get_absolute_url }}">
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                        <div class="show_info_load">
+                            <p>Name: {{company_carrier_load.company_name}}</p>
+                            <p>MC #{{company_carrier_load.company_mc}}</p>
+                            <p>Prefix {{company_carrier_load.company_prefix}}</p>
+                        </div>
+                    {% if perms.transport.add_company %}
+                    {% if not load_data.stat_id == 7 %}
+                    {% if not load_data.stat_id == 6 %}
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="review_top">
+                <hr>
+                <img class="pi_views_img" src="{% static 'transport/images/debt.svg' %}" alt="debt">
+                <div class="pi_right">
+                    <h4>Seller:</h4>
+                    <h3 class="in_line_block_l">${{seller_debt | floatformat:'2g'}}</h3>
+                    <hr>
+                </div>
+            </div>
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/credit.svg' %}" alt="credit">
+                <div class="pi_right">
+                    <h4>Buyer:</h4>
+                    <h3 class="in_line_block_l">${{ buyer_credit | floatformat:'2g' }}</h3>
+                    <hr>
+                </div>
+            </div>
+            <div class="review_top">
+                <img class="pi_views_img" src="{% static 'transport/images/profit.svg' %}" alt="time_data">
+                <div class="pi_right">
+                    <h4>Profit:</h4>
+                    <h3 class="in_line_block_l">${{ profit | floatformat:'2g' }}<h3>
+                </div>
+            </div>
+        </div>
+        {% if perms.transport.change_load %}
+        {% if perms.transport.add_company %}
+        <div class="pi-list_more">
+            <div id="{{title_button}}"></div>
+            <button class="title-button_inside"
+                    onClick="show('list_more', '{{title_button}}', 'load_cash_info');return true;">
+                {{title_button}}
+            </button>
+            <div id="list_more" class="hidden">
+                <hr>
+                {% if perms.transport.add_company %}
+                {% if not load_data.stat_id == 7 %}
+                {% if not load_data.stat_id == 6 %}
+                <div id="{{button_set_seller_and_carrier}}"></div>
+                <button class="title-button_inside_margin"
+                        onClick="show('set_broker_carrier', '{{button_set_seller_and_carrier}}', 'load_info');return true;">
+                    {{button_set_seller_and_carrier}}
+                </button>
+                <div id="set_broker_carrier" class="hidden">
+                    <form action="{% url 'set_company_load' load_slug %}#seller_doc" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for m in form_load %}
+                        <div class="item"><label class="form-label" for="{{ m.id_for_label }}">{{m.label}}:</label>{{m}}
+                        </div>
+                        <div class="form-error">
+                            {{ m.errors }}
+                        </div>
+                        {% endfor %}
+                        <button class="form-button" type="submit">Save</button>
+                    </form>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% if perms.transport.add_company %}
+                <div id="button_set_status"></div>
+                <button class="title-button_inside_margin"
+                        onClick="show('set_status', 'button_set_status', 'load_info');return true;">
+                    {{button_set_status}}
+                </button>
+                <div id="set_status" class="hidden">
+                    <form action="{% url 'set_status' load_slug %}#seller_doc" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for m in status_choice %}
+                        {% if forloop.first %}
+                        <div class="item"><label class="form-label" for="{{ m.id_for_label }}">{{m.label}}:</label>{{m}}
+                        </div>
+                        <div class="form-error">
+                            {{ m.errors }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <button class="form-button" type="submit">Save</button>
+                    </form>
+                </div>
+                {% endif %}
+                {% if perms.transport.add_company %}
+                {% if not load_data.stat_id == 7 %}
+                {% if not load_data.stat_id == 6 %}
+                <div id="button_set_user"></div>
+                <button class="title-button_inside_margin"
+                        onClick="show('set_user', 'button_set_user', 'load_info');return true;">
+                    {{button_set_user}}
+                </button>
+                <div id="set_user" class="hidden">
+                    <form action="{% url 'set_user' load_slug %}#seller_doc" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for m in user_choice %}
+                        <div class="item"><label class="form-label" for="{{ m.id_for_label }}">{{m.label}}:</label>{{m}}
+                        </div>
+                        <div class="form-error">
+                            {{ m.errors }}
+                        </div>
+                        {% endfor %}
+                        <button class="form-button" type="submit">Save</button>
+                    </form>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,24 @@
+{% extends 'transport/base.html' %}
+{% block content %}
+<h2>{{title}}</h2>
+<div class="load_container">
+    <div class="item">
+        <form action="{% url 'search_seller' %}" method="post">
+            {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+            {% for f in form_seller %}
+            {% if not f.is_hidden %}
+            <div class="item"><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}:</label>{{ f }}</div>
+            <div class="form-error">{{ f.errors }}</div>
+            {% endif %}
+            {% endfor %}
+            <button class="form-button" type="submit">Search</button>
+        </form>
+        {% if manual == 'Y' %}
+        <a href="{% url 'add_seller' %}"><br>
+            <button class="form-button" type="submit">Manual input</button>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

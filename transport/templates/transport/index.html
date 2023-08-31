@@ -1,0 +1,30 @@
+{% extends 'transport/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="title-load_index">
+<p>{{title}}</p>
+</div>
+<div class="pi-list_index">
+        <div class="review_top">
+            <img class="pi_views_img_index" src="{% static 'transport/images/mobile.svg' %}" alt="mobile">
+            <div class="pi_right_index">
+                <h3>Adapted for mobile devices</h3>
+            </div>
+        </div>
+    </div>
+<hr>
+<a href="{% static 'transport/images/TAS-manual —Admin.pdf' %}" target="_blank">
+    <div class="pi-list">
+        <div class="review_top">
+            <img class="pi_views_img_index" src="{% static 'transport/images/user_guide.svg' %}" alt="user_guide">
+            <div class="pi_right_index">
+                <h3>Link to user manual</h3>
+                <p>This manual is valid for the current user</p>
+                <p>download format (pdf)</p>
+            </div>
+        </div>
+    </div>
+</a>
+<hr>
+{% endblock %}

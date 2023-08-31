@@ -1,0 +1,27 @@
+{% extends 'transport/base.html' %}
+{% load transport_tags %}
+
+{% block content %}
+<div class="load_container">
+    <div class="item_di">
+        <div class="title-load">
+            <p>{{title}}</p>
+        </div>
+        {% for l in company_list_data %}
+        {% if perms.transport.change_company %}
+        <a href="{{ l.get_absolute_url }}">
+        {% endif %}
+            {% if l.part_holding %}
+            <div class="load-list_green">
+            {% else %}
+            <div class="load-list_grey">
+            {% endif %}
+                MC# {{l.company_mc}} {{l.company_name}}
+            </div>
+        {% if perms.transport.change_company %}
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

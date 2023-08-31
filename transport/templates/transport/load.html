@@ -1,0 +1,11 @@
+{% extends 'transport/base.html' %}
+{% load transport_tags %}
+
+{% block content %}
+{% csrf_token %}
+{% load_info %}
+{% buyer_load_info %}
+{% show_load_info %}
+
+
+{% endblock %}

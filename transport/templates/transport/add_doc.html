@@ -1,0 +1,36 @@
+{% extends 'transport/base.html' %}
+{% block content %}
+
+{% if perms.transport.add_load %}
+ <div class="load_container">
+    <div class="title-load">
+        <p>{{title}}</p>
+    </div>
+    <div class="item">
+        {% if load_broker and load_carrier %}
+        <form action="{% url 'add_doc' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+
+            {% for m in  load_ms %}
+            {% if not m.is_hidden %}
+            <div class="item"><label class="form-label" for="{{ f.id_for_label }}">{{m.label}}:</label>{{ m }}</div>
+            <div class="form-error">{{ m.errors }}</div>
+            {% endif %}
+            {% endfor %}
+
+            {% for f in  form_load %}
+            {% if not f.is_hidden %}
+            <div class="item"><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}:</label>{{ f }}</div>
+            <div class="form-error">{{ f.errors }}</div>
+            {% endif %}
+            {% endfor %}
+            <button class="form-button" type="submit">Add load</button>
+        </form>
+        {% else %}
+        <p>Contact the administrator to add a default broker company and a default carrier company.</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'transport/base.html' %}
+{% load static %}
+{% block content %}
+<div class="load_container">
+    <div class="item_di">
+        <div class="title-load">
+            <p>{{title}}</p>
+        </div>
+        <div class="successfully_green">
+            {{successfully}}
+        </div>
+        <div class="pi-list_more">
+            <form action="{% url 'add_holding_company' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for n in broker_form %}
+                {% if not n.is_hidden %}
+                <div class="item"><label class="form-label" for="{{ n.id_for_label }}">{{n.label}}:</label>{{n}}
+                </div>
+                <div class="form-error">
+                    {{ n.errors }}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <button class="form-button" type="submit">{{title_add}}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

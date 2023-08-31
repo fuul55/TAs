@@ -1,0 +1,79 @@
+{% extends 'transport/base.html' %}
+{% load transport_tags %}
+{% block content %}
+
+{% if perms.transport.view_cashtransaction %}
+<div class="load_container">
+    <div class="item_di">
+        <div class="title-load">
+            <p>{{title}}</p>
+        </div>
+        {% if not request.user|has_group:'Broker' %}
+        <h4>Companies included in the holding</h4>
+        {% for comp in company_holding %}
+        <div>
+            <a href="{% url 'company_transaction' comp.pk %}">
+                <button class="title-button_inside_margin">
+                    {{comp.company_name | truncatechars:'25' }}
+                </button>
+            </a>
+        </div>
+        {% endfor %}
+        <hr>
+        {% endif %}
+        {% if not request.user|has_group:'Broker' %}
+        <h4>Expected cash inflows and outflows</h4>
+        <div>
+            <a href="{% url 'payment_expected' %}">
+                <button class="title-button_inside_margin">
+                    Payment expected $ {{payment_expected | floatformat:'2g'}}
+                </button>
+            </a>
+        </div>
+        {% endif %}
+        <div>
+            <a href="{% url 'to_pay' %}">
+                <button class="title-button_inside_margin">
+                    To pay $ {{to_pay_sum | floatformat:'2g'}}
+                </button>
+            </a>
+        </div>
+        {% if not request.user|has_group:'Broker' %}
+        <hr>
+        <h4>Create an invoice for the selected company</h4>
+        <button class="title-button_inside_margin"
+                onClick="show('edit_to_pay', '{{to_pay_id}}', '#');return false;">
+            {{title_create_invoice}}
+        </button>
+        <div id="edit_to_pay" class="hidden">
+            <form action="{% url 'pdfview:render_pdf_invoice_for_company' %}#" target="_blank" method="post">
+                {% csrf_token %}
+                <div class="form-error">
+                    {{ form.non_field_errors }}
+                </div>
+                {% for m in company_invoice %}
+                <div class="item">
+                    <label class="form-label" for="{{ f.id_for_label }}">{{m.label}}:</label>
+                    {{ m }}
+                </div>
+                <div class="form-error">
+                    {{ m.errors }}
+                </div>
+                {% endfor %}
+                <button class="form-button" type="submit">{{button_create_invoice}}</button>
+            </form>
+        </div>
+        <hr>
+        <h4>Export file</h4>
+        <div>
+            <a href="{% url 'pdfview:export_load_csv' %}">
+                <button class="title-button_inside_margin">
+                    Export load by user in CSV format
+                </button>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% load static %}
+{% load transport_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}}</title>
+    <link type="text/css" href="{% static 'transport/css/styles.css' %}" rel="stylesheet"/>
+    <script type="text/javascript" src="{% static 'transport/js/js_views.js' %}"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" href="{% static 'transport/images/main.ico' %}" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="head">
+    <div class="header">
+        <a href="{% url 'home' %}">
+            <div class="logo"></div>
+        </a>
+        <div class="head-right">{{user.username}}</div>
+    </div>
+    {% if request.user.is_authenticated %}
+    <!-- Content -->
+    <div class="content-text">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <!-- End content -->
+    <!-- Footer -->
+    <div id="footer">
+        {% block main-menu %}
+        {% show_menu %}
+        {% endblock main-menu %}
+    </div>
+    {% else %}
+    <div class="content-text">
+        {% block login %}
+        {% endblock %}
+    </div>
+    {% endif %}
+</div>
+<!-- End footer -->
+</body>
+</html>

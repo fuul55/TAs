@@ -1,0 +1,25 @@
+{% extends 'transport/base.html' %}
+{% load transport_tags %}
+
+{% block content %}
+<div class="load_container">
+    <div class="item_di">
+        <div class="title-load">
+            <p>{{title}}</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {% for m in user_form %}
+            {% if not m.is_hidden %}
+            <div class="item"><label class="form-label" for="{{ m.id_for_label }}">{{m.label}}:</label>{{m}}
+            </div>
+            <div class="form-error">
+                {{ m.errors }}
+            </div>
+            {% endif %}
+            {% endfor %}
+            <button class="form-button" type="submit">{{button_add}}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

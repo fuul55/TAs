@@ -1,0 +1,164 @@
+{% extends 'transport/base.html' %}
+{% load transport_tags %}
+{% load static %}
+{% block content %}
+<div class="load_container">
+    <div class="item_di">
+        <div class="title-load">
+            <p>{{title}}</p>
+        </div>
+        {% if perms.transport.add_company %}
+        <div class="pi-list_more">
+            <a href="{% url 'show_user_list' %}">
+                <button class="title-button_inside">
+                    {{button_user_list}}
+                </button>
+            </a>
+        </div>
+        {% else %}
+        <div class="item_di">
+            <div class="title-load">
+                <p>User info</p>
+            </div>
+            <div class="user-list_grey">
+                <h4>User / {{user.username}} /</h4>
+                <p>last name - {{user.last_name}} </p>
+                <p>first name - {{user.first_name}}</p>
+                <p>email - {{user.email}}</p>
+                <p>User broker - {{user.usercompany.user_company.company_name}}</p>
+                <p>Load default broker - {{l.usercompany.load_broker_default.company_name}}</p>
+                <p>Load default carrier - {{l.usercompany.load_carrier_default.company_name}}</p>
+            </div>
+        </div>
+        {% endif %}
+        {% if not request.user|has_group:'Broker' %}
+        <div class="pi-list_more">
+            {% if perms.transport.add_company %}
+            <div id="more_company_clos"></div>
+            <button class="title-button_inside"
+                    onClick="show('more_company', 'more_company_clos', 'more_company_clos');return true;">
+                {{title_broker_carrier}}
+            </button>
+            <div id="more_company" class="hidden">
+                {% endif %}
+                {% if perms.transport.add_company %}
+                <hr>
+                <div id="add_holding_clos"></div>
+                <a href="{% url 'add_holding_company' %}">
+                    <button class="title-button_inside">
+                        {{title_add_broker}}
+                    </button>
+                </a>
+                {% endif %}
+                {% if perms.transport.add_company %}
+                <div id="set_clos"></div>
+                <button class="title-button_inside_margin"
+                        onClick="show('add_set', 'set_clos', 'set_clos');return true;">
+                    {{title_default_set}}
+                </button>
+                <div id="add_set" class="hidden">
+                    <form action="{% url 'default_set_company' %}#add_carrier_clos" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for m in default_set_form %}
+                        <div class="item"><label class="form-label" for="{{ m.id_for_label }}">{{m.label}}:</label>{{m}}
+                        </div>
+                        <div class="form-error">
+                            {{ m.errors }}
+                        </div>
+                        {% endfor %}
+                        <button class="form-button" type="submit">{{set_default}}</button>
+                    </form>
+                </div>
+                <hr>
+                {% endif %}
+                <div class="review_top">
+                    <img class="pi_views_img" src="{% static 'transport/images/load_vB.svg' %}" alt="broker">
+                    <div class="pi_right">
+                        <h3>Broker info:</h3>
+                        {% for b in broker %}
+                        {% with i=0 %}
+                        <div class="broker-list_show">
+                            {% if b.company_default == 'default' %}
+                            <h4>Default Broker</h4>
+                            {% endif %}
+                            <p># {{ forloop.counter }}. Broker name: {{b.company_name}}</p>
+                            <p>MS: {{b.company_mc}} DOT: {{b.company_dot}}</p>
+                            <p>Address: {{b.company_address}}</p>
+                            <p>Email: {{b.company_email}}</p>
+                            <p>Phone: {{b.company_phone}}</p>
+                            <hr>
+                            <p>Wire instructions: {{b.company_wire | linebreaks}}</p>
+                            <hr>
+                            <p>Broker prefix: {{b.company_prefix}}</p>
+                            {% if b.company_logo %}
+                            <hr>
+                            <p>Broker logo:</p>
+                            <img class="show_company_logo" src="{{b.company_logo.url}}" alt="company_logo">
+                            {% endif %}
+                            {% if perms.transport.add_company %}
+                            <hr>
+                            <a href="{{ b.get_absolute_url }}">
+                                <div class="button-url">
+                                    Edit Company
+                                </div>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                <div class="review_top">
+                    <img class="pi_views_img" src="{% static 'transport/images/load_vC.svg' %}" alt="carrier">
+                    <div class="pi_right">
+                        <h3>Carrier info:</h3>
+                        {% for c in carrier %}
+                        {% with i=0 %}
+                        <div class="broker-list_show">
+                            {% if c.company_default == 'default' %}
+                            <h4>Default Carrier</h4>
+                            {% endif %}
+                            <p># {{ forloop.counter }}. Carrier name: {{c.company_name}}</p>
+                            <p>MS: {{c.company_mc}} DOT: {{c.company_dot}}</p>
+                            <p>Address: {{c.company_address}}</p>
+                            <p>Email: {{c.company_email}}</p>
+                            <p>Phone: {{c.company_phone}}</p>
+                            <hr>
+                            <p>Carrier prefix: {{c.company_prefix}}</p>
+                            <hr>
+                            <p>Wire instructions: {{c.company_wire | linebreaks}}</p>
+                            {% if c.company_logo %}
+                            <hr>
+                            <p>Carrier logo:</p>
+                            <img class="show_company_logo" src="{{c.company_logo.url}}" alt="company_logo">
+                            {% endif %}
+                            {% if perms.transport.add_company %}
+                            <hr>
+                            <a href="{{ c.get_absolute_url }}">
+                                <div class="button-url">
+                                    Edit Company
+                                </div>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if perms.transport.add_company %}
+        <div class="pi-list_more">
+            <a href="{% url 'company_list' %}">
+                <button class="title-button_inside">
+                    {{button_company_list}}
+                </button>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

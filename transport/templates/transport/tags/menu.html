@@ -1,0 +1,14 @@
+{% if perms.transport.add_load %}
+<li><a href="{% url menu.0.url_name %}"><img src={{menu.0.img}} alt={{menu.0.title}}></a></li>
+{% endif %}
+{% if perms.transport.view_load %}
+<li><a href="{% url menu.2.url_name %}"><img src={{menu.2.img}} alt={{menu.2.title}}></a></li>
+{% endif %}
+{% if perms.transport.view_cashtransaction %}
+<li><a href="{% url menu.3.url_name %}"><img src={{menu.3.img}} alt={{menu.3.title}}></a></li>
+{% endif %}
+{% if perms.transport.view_buyerload %}
+<li><a href="{% url menu.4.url_name %}"><img src={{menu.4.img}} alt={{menu.4.title}}></a></li>
+{% endif %}
+<li class="last"><a href="{% url menu.5.url_name %}"><img src={{menu.5.img}} alt={{menu.5.title}}></a></li>
+<div class="clear"></div>

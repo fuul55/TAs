@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title_invoice}}</title>
+    <style>
+        .top_table {
+            width:100%; /* задаем ширину таблицы */
+            word-wrap: break-word; /* слово может быть прервано в произвольном месте */
+            padding-bottom: 5px;
+
+        }
+        .top_table {
+            width:100%;
+            word-wrap: break-word;
+        }
+
+        .logo_tb {
+            text-align: left; /* выравнивает текст ячейки влево */
+            width:70%;
+        }
+        .broker_info {
+            text-align: left; /* выравнивает текст ячейки влево */
+            padding-left: 5px;
+            width:30%;
+            color: #444;
+            border-left: 2px solid #444;
+        }
+        .title,
+        .title_load_info {
+            padding-top: 100px;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .title {
+            color: #444;
+        }
+        .title_load_info {
+            color: black;
+
+        }
+        .delivery,
+        .pickup {
+            vertical-align: top;
+            text-align: left;
+        }
+        .delivery_instructions,
+        .pickup_instructions {
+            vertical-align: top;
+            text-align: left;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        p.bold {
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .carrier_info {
+            vertical-align: top;
+            text-align: left; /* выравнивает текст ячейки влево */
+            width:40%;
+        }
+        .track_info {
+            vertical-align: top;
+            margin-left: 30px;
+            text-align: left; /* выравнивает текст ячейки влево */
+            width:40%;
+        }
+        .load_table{
+            margin-bottom:20px;
+            border-bottom: 1px solid #A1BAD4;
+        }
+
+        td {
+            padding: 5px 0 2px 0;
+        }
+
+        .payment_table {
+            float: left;
+            width:100%;
+            margin: 5px 15px 5px  15px;
+            vertical-align: top;
+        }
+        .description {
+            width:40%;
+            border-bottom: 1px solid #444;
+        }
+        .description_ {
+            width:40%;
+        }
+        .lum {
+            width:20%;
+            border-bottom: 1px solid #444;
+            text-align: right;
+        }
+        .lim_ {
+            width:40%;
+            background-color: #E2E2E2;
+        }
+        .lim {
+            width:20%;
+            text-align: right;
+            background-color: #E2E2E2;
+        }
+        .lun {
+            width:20%;
+            text-align: right;
+        }
+        .table_bu {
+            vertical-align: top;
+            text-align: right;
+        }
+        .bank_table {
+            float: left;
+            margin: 0 15px 0  15px;
+            vertical-align: top;
+        }
+        .bank_colum_left {
+            text-align: left;
+            padding: 5px 0 1px 0;
+            width:auto;
+            background-color: #E2E2E2;
+        }
+        .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<table class="top_table">
+    <tr>
+        <td class="logo_tb">
+            <img class="logo" src="media/{{company.company_logo}}">
+        </td>
+        <td class="broker_info">
+            {{company.company_name}}<br>
+            {{company.company_address}}<br>
+            Phone: {{company.company_phone}}<br>
+            Email: {{company.company_email}}<br>
+            MC#: {{company.company_mc}}
+        </td>
+    </tr>
+</table>
+<div class="line">
+</div>
+<div class="title">
+    {{title_invoice}}{{date | date:"ddyhis"}}<br>
+    Date {{date | date:"d M Y"}}<br>
+</div>
+<div>
+    BILL TO<br>
+    {{bill_to | linebreaksbr}}
+</div>
+    <br>
+    <br>
+<table class="payment_table">
+    <tr>
+        <td class="lim_">
+            DESCRIPTION
+        </td>
+        <td class="lim">
+            QUANTITY
+        </td>
+        <td class="lim">
+            UNIT PRICE ($)
+        </td>
+        <td class="lim">
+            AMOUNT ($)
+        </td>
+    </tr>
+    <tr>
+        <td class="description">
+            {{description}}
+        </td>
+        <td class="lum">
+            1
+        </td>
+        <td class="lum">
+            ${{amount | floatformat:'2g'}}
+        </td>
+        <td class="lum">
+            ${{amount | floatformat:'2g'}}
+        </td>
+    </tr>
+    <tr>
+        <td class="description_">
+
+        </td>
+        <td>
+
+        </td>
+        <td class="lum">
+            TOTAL (USD):
+        </td>
+        <td class="lum">
+            ${{amount | floatformat:'2g'}}
+        </td>
+    </tr>
+    <tr>
+        <td class="description_">
+
+        </td>
+        <td>
+
+        </td>
+        <td class="lun">
+            TOTAL DUE (USD):
+        </td>
+        <td class="lun">
+            ${{amount| floatformat:'2g'}}
+        </td>
+    </tr>
+</table>
+
+<div>
+    <h3>Wire instructions:</h3>
+</div>
+<table class="bank_table">
+    <tr>
+        <td class="bank_colum_left">
+            {{company.company_wire | linebreaks}}
+        </td>
+    </tr>
+</table>
+
+<br>
+<div>
+    <h2 class="right">Thank you for your business!</h2>
+</div>
+</body>
+</html>

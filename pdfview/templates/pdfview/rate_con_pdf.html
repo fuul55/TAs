@@ -1,0 +1,208 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <style>
+        .top_table {
+            width:100%; /* задаем ширину таблицы */
+            word-wrap: break-word; /* слово может быть прервано в произвольном месте */
+            padding-bottom: 5px;
+            border-bottom: 1px solid #d3d3d3;
+        }
+        .top_table {
+            width:100%;
+            word-wrap: break-word;
+        }
+
+        .logo_tb {
+            text-align: left; /* выравнивает текст ячейки влево */
+            width:70%;
+        }
+        .broker_info {
+            text-align: right; /* выравнивает текст ячейки влево */
+            width:30%;
+            color: #444;
+        }
+        .title,
+        .title_load_info {
+            padding-top: 25px;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+        }
+
+        .title {
+            color: #000000;
+        }
+        .title_load_info {
+            color: #000000;
+
+        }
+        .delivery,
+        .pickup {
+            vertical-align: top;
+            text-align: left;
+        }
+        .delivery_instructions,
+        .pickup_instructions {
+            vertical-align: top;
+            text-align: left;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        p.bold {
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #000000;
+
+        }
+        .carrier_info {
+            vertical-align: top;
+            text-align: left; /* выравнивает текст ячейки влево */
+            width:40%;
+        }
+        .track_info {
+            vertical-align: top;
+            margin-left: 30px;
+            text-align: left; /* выравнивает текст ячейки влево */
+            width:40%;
+        }
+        .load_table{
+            margin-bottom:20px;
+            border-bottom: 1px solid #d3d3d3;
+        }
+        .payment_table {
+            float: left;
+            margin: 0 0 0 auto;
+            vertical-align: top;
+        }
+        .amount,
+        .rate,
+        .quantity {
+            width:70px;
+            border-bottom: 1px solid #d3d3d3;
+        }
+        .table_bu {
+            vertical-align: top;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<table class="top_table">
+    <tr>
+        <td class="logo_tb">
+            <img class="logo" src="media/{{company.company_logo}}">
+        </td>
+        <td class="broker_info">
+            {{company.company_name}}<br>
+            {{company.company_address}}<br>
+            Phone: {{company.company_phone}}<br>
+            Email: {{company.company_email}}<br>
+            MC#: {{company.company_mc}}
+        </td>
+    </tr>
+</table>
+<div class="line">
+</div>
+<div class="title">
+    {{title_rc}}
+</div>
+<table>
+    <tr>
+        <td class="carrier_info">
+            Carrier name: {{buyer.company_mc.company_name}}<br>
+            Carrier MC #: {{buyer.buyer_MC}}<br>
+            {{buyer.truck_info | linebreaksbr}}
+        </td>
+        <td class="track_info">
+            Requirements: {{buyer.truck_requirements.name}}
+            {{buyer.truck_requirements | linebreaksbr}}
+
+        </td>
+    </tr>
+</table>
+<div class="title_load_info">
+    Load Information:
+</div>
+{% for s in seller %}
+{% with i=0 %}
+<table class="load_table">
+    <tr>
+        <td class="pickup">
+            <p class="bold">Pickup:{{ forloop.counter }}</p>
+            {{s.pickup_data}} {{s.pickup_time_from}} {{s.pickup_time_to}}
+            {{s.pickup_location | linebreaksbr}}
+        </td>
+        <td class="pickup_instructions">
+            <p class="bold">Instructions:</p>
+            {{s.pickup_instructions | linebreaksbr}}
+        </td>
+        <td class="delivery">
+            <p class="bold">Delivery:{{ forloop.counter }}</p>
+            {{s.destination_data}} {{s.destination_time_from}} {{s.destination_time_to}}<br>
+            {{s.destination_location  | linebreaksbr}}
+        </td>
+        <td class="delivery_instructions">
+            <p class="bold">Instructions:</p>
+            {{s.destination_instructions | linebreaksbr}}
+        </td>
+    </tr>
+</table>
+{% endwith %}
+{% endfor %}
+<table class="payment_table">
+    <tr>
+        <td>
+            Quantity
+        </td>
+        <td>
+            Rate
+        </td>
+        <td>
+            Amount
+        </td>
+    </tr>
+    <tr>
+        <td class="quantity">
+            1
+        </td>
+        <td class="rate">
+            ${{buyer.load_sell_price | floatformat:'2g'}}
+        </td>
+        <td class="amount">
+            ${{buyer.load_sell_price | floatformat:'2g'}}
+        </td>
+    </tr>
+</table>
+<br>
+<p>Rate includes all accessorial charges, i.e. stop-offs, loading/unloading fees, fuel surcharge, etc. Unloading or lumper fees (if applicable) will be paid only if {{company.company_name}} is notified at the time of delivery with a
+lumper receipt and the original bill of lading. For payment, your invoice must include the most recent rate confirmation, signed bills of lading and any applicable receipts. For detention payment, the Bill of
+lading must include IN/OUT times by the shipper or the consignee. No advance of any kind will be given unless negotiated prior to the rate confirmation being sent. A minimum of 3% will be charged for
+all advances. {{company.company_name}} does NOT pay detention at first come, first serve facilities. Carrier agrees to indemnify and hold harmless Broker of and from any and all claims, demands, losses, causes of
+action, payments to Carrier in an effort to cover such losses. If this shipment is found to be Double Brokered, this agreement is void. A MINIMUM of $50.00 may be deducted for late pick up and/or
+delivery. A $10.00 fee will be deducted for a Comcheck. {{company.company_name}} must receive a picture or copy of the signed Bill of lading from the driver or carrier at the time of delivery. Failure to do so will result in a
+minimum of $50.00 deduction per day until received. Text message, email and fax copies are all acceptable forms of POD. Payment Terms: 30 days upon receipt of invoice.</p>
+<p>Carrier Rate Confirmation Load {{load_number}} Page 1 of 1</p>
+<p>This rate con must be signed {{buyer.date_sold_load}} and returned to {{company.company_email}}</p>
+
+<br>
+<table class="table_bu">
+    <tr>
+        <td>
+            <p>You can also send all the paperwork of the load to E-mail: ________________________________________________</p>
+                                                    <p>CARRIER SIGNATURE: ________________________________________________</p>
+                                                                 <p>Date: ________________________________________________</p>
+                                                      <p>Dispatcher Info: ________________________________________________</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,108 @@
+{% load static %}
+{% load transport_tags %}
+
+{% if perms.transport.view_sellerload %}
+<div id="seller_load_info" class="load_container">
+    <div class="item">
+        <div class="block_header">
+            {{title}}
+        </div>
+        {% for l in seller_load %}
+        {% if load.stat_id == 2 %}
+        <div class="pi-list">
+            <h4 class="rad_text">For the final clearance of the seller load, click on the "Edit seller load" button
+                and fill in all the necessary data!</h4>
+            <hr/>
+            {% else%}
+            <div class="pi-list">
+                <div class="review_top">
+                    <img class="pi_views_img" src="{% static 'transport/images/load_v.svg' %}" alt="time_data">
+                    <div class="pi_right">
+                        <h4>Seller load #: {{ l.seller_load_number }}</h4>
+                        {% if perms.transport.change_company %}
+                        {% if load.stat_id != 7 %}
+                        {% if load.stat_id != 6 %}
+                        <a href="{{ l.company_mc.get_absolute_url }}" target="_blank">
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}
+                            <div class="show_info_load">
+                                <p>Name: {{ l.company_mc.company_name }}</p>
+                                <p>MC#: {{ l.company_mc.company_mc }} DOT#: {{ l.company_mc.company_dot }}</p>
+                                <p>Email: {{ l.company_mc.company_email }}</p>
+                                <p>Phone: {{ l.company_mc.company_phone }}</p>
+                            </div>
+                        {% if perms.transport.change_company %}
+                        {% if load.stat_id != 7 %}
+                        {% if load.stat_id != 6 %}
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}
+                        <h4>Buy price: ${{ l.load_buy_price | floatformat:'2g'}}</h4>
+                        <p>Create data {{ l.date_create | date:"d M Y" }}</p>
+                        <p>Update data {{ l.date_update | date:"d M Y" }}</p>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="review_top">
+                    <img class="pi_views_img" src="{% static 'transport/images/location.svg' %}" alt="time_data">
+                    <div class="pi_right">
+                        <h4>Pickup:</h4>
+                        <p>{{ l.pickup_data | date:"d M Y" }} {{ l.pickup_time_from | date:"H:i" }}
+                            {{ l.pickup_time_to | date:"H:i" }}</p>
+                        <h4>Location:</h4>
+                        <p>{{ l.pickup_location | linebreaks }}</p>
+                        <h4>Instructions:</h4>
+                        <p>{{ l.pickup_instructions | linebreaks }}</p>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="review_top">
+                    <img class="pi_views_img" src="{% static 'transport/images/location_.svg' %}" alt="time_data">
+                    <div class="pi_right">
+                        <h4>Destination:</h4>
+                        <p>{{ l.destination_data | date:"d M Y" }} {{ l.destination_time_from | date:"H:i" }}
+                            {{ l.destination_time_to | date:"H:i" }}</p>
+                        <h4>Location:</h4>
+                        <p>{{ l.destination_location | linebreaks }}</p>
+                        <h4>Instructions:</h4>
+                        <p>{{ l.destination_instructions | linebreaks }}</p>
+                    </div>
+                </div>
+                {% endif%}
+            </div>
+            {% show_seller_doc l.id %}
+            {% endfor %}
+        </div>
+        {% if not load.stat_id == 2 %}
+        {% if perms.transport.add_sellerload %}
+        {% if load.stat_id != 7 %}
+        {% if load.stat_id != 6 %}
+        <div id="add_seller_load"></div>
+        <button class="title-button_inside"
+                onClick="show('add_seller', 'add_seller_load', 'seller_load_info');return true;">
+            {{title_add}}
+        </button>
+        <div id="add_seller" class="hidden">
+            <form action="{% url 'seller_load_add' %}#seller_doc" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for m in seller_load_form %}
+                {% if not m.is_hidden %}
+                <div class="item"><label class="form-label" for="{{ m.id_for_label }}">{{m.label}}:</label>{{ m }}
+                </div>
+                <div class="form-error">
+                    {{ m.errors }}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <button class="form-button" type="submit">{{title_add}}</button>
+            </form>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endif %}
