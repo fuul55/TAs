@@ -21,7 +21,7 @@ def get_mc_info(mc_number):
     mc = new_str + str(mc_number)
 
     # mc = mc_number
-    wb_key = 'b19df8c62ce824d3134984c27d38e8276a43ecf6'
+    wb_key = ''
 
     string_as = requests.get(f'https://mobile.fmcsa.dot.gov/qc/services/carriers/docket-number/{mc}?webKey={wb_key}')
     if string_as.status_code == 200:
